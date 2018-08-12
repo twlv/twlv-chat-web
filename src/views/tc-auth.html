@@ -1,0 +1,16 @@
+<div class="pane">
+  <h3>Authenticate</h3>
+
+  <form (submit)="signIn(evt)">
+    <div>
+      <label>Identity key</label>
+      <textarea class="privkey-field">[[identity.privKey]]</textarea>
+    </div>
+
+    <input type="submit" value="Get online">
+  </form>
+
+  <p>or</p>
+
+  <button (click)="generate(evt)">Generate new identity</button>
+</div>
