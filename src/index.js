@@ -7,7 +7,11 @@ import '@xinix/xin/scss/xin-components.scss';
 
 (async () => {
   await bootstrap({
-    // 'tc.networkId': 'twlv-chat',
+    'tc.networkId': 'twlv-chat',
+    'tc.apiUrls': [
+      `sockjs://192.168.3.105:3000/sock`,
+      // `sockjs://192.168.1.103:3000/sock`,
+    ],
     'view.transition': 'fade',
     'view.loaders': [
       {

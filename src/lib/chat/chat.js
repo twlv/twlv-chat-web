@@ -30,17 +30,21 @@ class Chat extends EventEmitter {
     return this.node.stop();
   }
 
-  async send ({ address, group, content, type = 'text/plain' }) {
+  async send ({ channelId, address, content, type = 'text/plain' }) {
+    let channel;
+
     if (address) {
-      let channel = this.getPrivateChannel(address);
-      let { t, c } = channel.getState(this.identity.address).next();
-      await channel.put({ address: this.identity.address, content, type, t, c });
-      this.emit('channel:update', channel);
-      await this._syncStates(channel);
-      return;
+      channel = this.getPrivateChannel(address);
+    } else if (channelId) {
+      channel = this.prepareChannel(channelId);
+    } else {
+      throw new Error('Unknown send to, no channelId nor address specified');
     }
 
-    throw new Error('Unimplemented');
+    let { t, c } = channel.getState(this.identity.address).next();
+    await channel.put({ address: this.identity.address, content, type, t, c });
+    this.emit('channel:update', channel);
+    await this._syncStates(channel);
   }
 
   getPrivateChannel (address) {
@@ -96,6 +100,7 @@ class Chat extends EventEmitter {
       try {
         await this._flightStates(address, channel);
       } catch (err) {
+        console.error(err);
         // noop
       }
     }));

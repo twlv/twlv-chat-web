@@ -1,7 +1,7 @@
 import { define } from '@xinix/xin';
 import { App } from '@xinix/xin/components';
 import { Node, Identity } from '@twlv/core';
-import { Chat } from '../lib/chat';
+import { ApiClient } from '../lib/api';
 
 import '@xinix/xin/middlewares';
 import './tc-app.scss';
@@ -29,24 +29,50 @@ class TcApp extends App {
 
     this.networkId = this.__repository.get('tc.networkId') || 'twlv-chat';
 
-    this.use(async (ctx, next) => {
-      if (ctx.uri !== '/auth' && !this.client) {
-        return this.navigate('/auth');
-      }
-      await next();
-    });
-
-    if (this.storage.TC_KEY) {
-      let identity = new Identity(this.storage.TC_KEY);
-      this.signIn(identity);
-    }
+    this.use(this._middleware.bind(this));
   }
 
-  signIn (identity) {
+  async _middleware (ctx, next) {
+    if (this.storage.TC_KEY) {
+      let identity = new Identity(this.storage.TC_KEY);
+      await this.signIn(identity);
+    }
+
+    if (ctx.uri !== '/auth' && !this.client) {
+      return this.navigate('/auth');
+    }
+
+    await next();
+  }
+
+  async signIn (identity) {
     let { networkId } = this;
+
     let node = new Node({ networkId, identity });
+
+    let profile = {
+      name: this.storage.TC_NAME || identity.address,
+    };
+
+    let controlUrls = this.__repository.get('tc.apiUrls');
+
+    this.client = new ApiClient({ node, controlUrls, profile });
+
+    // prepare chat client
+    await this.client.start();
+
     this.storage.TC_KEY = identity.privKey;
-    this.client = new Chat({ node });
+  }
+
+  sendText (channelId, message) {
+    this.client.send({ channelId, content: message });
+  }
+
+  async getChannelName (id) {
+    let channel = await this.client.prepareChannel(id);
+    return channel.members[0] === this.client.identity.address
+      ? channel.members[1]
+      : channel.members[0];
   }
 }
 

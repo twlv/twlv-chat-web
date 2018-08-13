@@ -1,16 +1,19 @@
-<div class="header">
-  <img src="http://emilcarlsson.se/assets/harveyspecter.png" alt="" />
-  <p>Harvey Specter</p>
-</div>
-<div class="content">
-  <div class="messages">
-    <ul>
-    </ul>
+<div class="vertical layout">
+  <h3>[[name]]</h3>
+
+  <div id="messagesPane" class="messages flex">
+    <xin-for items="[[messages]]" as="message">
+      <template>
+        <div>
+          <pre>[[message.address]]</pre>:
+          <span>[[message.content]]</span>
+        </div>
+      </template>
+    </xin-for>
   </div>
-</div>
-<div class="message-input">
-  <div class="wrap">
-  <input id="message-input-text" type="text" placeholder="Write your message..." />
-  <button class="submit" onclick="send()"><i class="fa fa-paper-plane" aria-hidden="true"></i></button>
-  </div>
+
+  <form class="message layout">
+    <input id="messageField" class="flex" type="text" placeholder="Write your message..." value="{{form.message}}">
+    <input type="submit" (click)="sendMessage(evt)" value="Send">
+  </form>
 </div>

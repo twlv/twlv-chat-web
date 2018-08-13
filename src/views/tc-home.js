@@ -14,6 +14,17 @@ class TcHome extends View {
       },
     });
   }
+
+  startConversation (evt) {
+    evt.preventDefault();
+
+    if (!this.form || !this.form.address) {
+      throw new Error('Address is required');
+    }
+
+    let channel = this.__app.client.getPrivateChannel(this.form.address);
+    this.__app.navigate(`/conversation/${channel.id}`);
+  }
 }
 
 define('tc-home', TcHome);

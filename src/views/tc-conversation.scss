@@ -1,0 +1,14 @@
+tc-conversation {
+  .messages {
+    pre {
+      display: inline;
+    }
+  }
+  .message {
+    height: auto;
+
+    input {
+      width: auto;
+    }
+  }
+}

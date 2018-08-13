@@ -22,7 +22,7 @@ class TcAuth extends View {
     evt.preventDefault();
 
     if (!this.identity) {
-      return;
+      throw new Error('Identity key is required');
     }
 
     this.__app.signIn(this.identity);
