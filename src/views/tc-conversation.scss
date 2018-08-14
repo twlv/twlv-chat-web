@@ -1,14 +1,98 @@
 tc-conversation {
+  .friend-chat {
+    position: relative;
+    padding: 10px 5px 10px 60px;
+    border-bottom: 1px solid #d5d7d4;
+
+    img {
+      object-fit: cover;
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      position: absolute;
+      left: 10px;
+    }
+    h3 {
+      margin: 0;
+      letter-spacing: .03rem;
+      font-size: 1rem;
+      color: #383838
+    }
+    span {
+      font-size: .8rem;
+      letter-spacing: .02rem;
+      color: #c1c1c1;
+      font-weight: 300;
+    }
+
+  }
   .messages {
-    pre {
-      display: inline;
+    overflow-y: scroll;
+    padding-bottom: 55px;
+    .line {
+      padding: 10px 10px 0;
+      clear: both;
+      .name {
+        color: #B0BEC5;
+        letter-spacing: 0.03rem;
+        font-size: 0.675rem;
+        display: block;
+      }
+      .chat {
+        max-width: 85%;
+        padding: 0.5rem 1rem;
+        font-size: 0.875rem;
+        border-radius: 1rem;
+        margin-bottom: 0.5rem;
+        word-break: break-all;
+        text-transform: capitalize;
+        background-color: #E91E63;
+        color: #fff;
+        border-bottom-left-radius: 0.125rem;
+        margin: 0;
+        display: inline-block;
+        letter-spacing: .01rem;
+        font-weight: 300;
+        text-align: left;
+        margin-top: 3px;
+
+        span {
+          display: block;
+          text-align: right;
+          color: #e6e6e6;
+          font-size: .6rem;
+        }
+      }
+      &.my {
+        float: right;
+        text-align: right;
+        .chat {
+          border-radius: 1rem 1rem 0;
+          background-color: #f3f3f3;
+          color: #000;
+          span {
+            color: #909090;
+          }
+        }
+      }
     }
   }
   .message {
     height: auto;
+    background: #e6e6e6;
+    padding: 10px;
+    box-sizing: border-box;
 
     input {
       width: auto;
+      border-radius: 15px;
+      /* line-height: 230%; */
+      box-shadow: inherit;
+      border: 0;
+      padding: 10px;
+    }
+    .my.line {
+
     }
   }
 }

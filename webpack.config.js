@@ -26,6 +26,10 @@ module.exports = function (_, { mode = 'development' }) {
           test: /\.html$/,
           use: [ 'html-loader' ],
         },
+        {
+          test: /\.(woff2?|eot|ttf)(\?.*)?$/i,
+          use: getUrlLoader('./fonts/[name].[ext]'),
+        },
       ],
     },
     plugins: [
@@ -48,3 +52,13 @@ module.exports = function (_, { mode = 'development' }) {
     },
   };
 };
+
+function getUrlLoader (name = '[name].[ext]') {
+  return {
+    loader: 'url-loader',
+    options: {
+      limit: 1000,
+      name: name,
+    },
+  };
+}

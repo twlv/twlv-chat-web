@@ -1,12 +1,20 @@
 <div class="vertical layout">
-  <h3>[[name]]</h3>
+  <div class="friend-chat">
+    <img src="https://www.theladders.com/wp-content/uploads/Mentally_Stron_040418-800x450.jpg" alt="">
+    <h3>[[name]]</h3>
+    <span>online</span>
+  </div>
 
   <div id="messagesPane" class="messages flex">
     <xin-for items="[[messages]]" as="message">
       <template>
-        <div>
-          <pre>[[message.address]]</pre>:
-          <span>[[message.content]]</span>
+        <div class="line">
+          <span class="name">[[message.address]]</span>
+          <p class="chat">[[message.content]] <span>20.08</span></p>
+        </div>
+        <div class="my line">
+          <span class="name">[[message.address]]</span>
+          <p class="chat">[[message.content]]<span>20.00</span></p>
         </div>
       </template>
     </xin-for>

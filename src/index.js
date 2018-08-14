@@ -2,6 +2,7 @@ import '@webcomponents/custom-elements';
 import { bootstrap } from '@xinix/xin';
 import './components/tc-app';
 
+import './fonts/lato/stylesheet.css';
 import '@xinix/xin/scss/xin.scss';
 import '@xinix/xin/scss/xin-components.scss';
 
@@ -9,7 +10,7 @@ import '@xinix/xin/scss/xin-components.scss';
   await bootstrap({
     'tc.networkId': 'twlv-chat',
     'tc.apiUrls': [
-      `sockjs://192.168.3.105:3000/sock`,
+      `sockjs://${location.hostname}:3000/sock`,
       // `sockjs://192.168.1.103:3000/sock`,
     ],
     'view.transition': 'fade',
