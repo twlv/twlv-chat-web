@@ -6,12 +6,21 @@ import './fonts/lato/stylesheet.css';
 import '@xinix/xin/scss/xin.scss';
 import '@xinix/xin/scss/xin-components.scss';
 
+const debug = require('debug')('twlv-chat-web:-');
+
+// connect to local
+// const SOCK_URL = `sockjs://${location.hostname}:3000/sock`;
+
+// connect to heroku
+const SOCK_URL = 'sockjs://twlv-chat-api.herokuapp.com/sock';
+
 (async () => {
+  debug(`Connecting to sock ${SOCK_URL}`);
+
   await bootstrap({
     'tc.networkId': 'twlv-chat',
     'tc.apiUrls': [
-      `sockjs://${location.hostname}:3000/sock`,
-      // `sockjs://192.168.1.103:3000/sock`,
+      SOCK_URL,
     ],
     'view.transition': 'fade',
     'view.loaders': [

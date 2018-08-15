@@ -13,7 +13,7 @@ module.exports = function (_, { mode = 'development' }) {
     },
     output: {
       path: path.join(__dirname, 'www'),
-      filename: `[name]${mode === 'production' ? '.min' : ''}.js`,
+      filename: `js/[name]${mode === 'production' ? '.min' : ''}.js`,
     },
     // devtool: 'sourcemap',
     module: {

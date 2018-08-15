@@ -35,6 +35,11 @@ export class ApiClient extends Chat {
     this.node.addDialer(new SockJsDialer());
     this.node.addFinder(new ApiFinder(this));
 
+    let listener = new WebRTCListener();
+    let dialer = new WebRTCDialer();
+    this.node.addListener(listener);
+    this.node.addDialer(dialer);
+
     await super.start();
 
     // setup control api connections
@@ -43,13 +48,7 @@ export class ApiClient extends Chat {
       let con = await this.node.connect(url);
       this.controlAddresses.push(con.peer.address);
     }));
-
-    await this.node.stop();
-
-    this.node.addListener(new WebRTCListener({ signalers: this.controlAddresses }));
-    this.node.addDialer(new WebRTCDialer({ signalers: this.controlAddresses }));
-
-    await this.node.start();
+    listener.signalers = dialer.signalers = this.controlAddresses;
 
     // send first introduction to control api
     this.sendControl('introduce', this.profile);
