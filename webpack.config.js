@@ -13,14 +13,18 @@ module.exports = function (_, { mode = 'development' }) {
     },
     output: {
       path: path.join(__dirname, 'www'),
-      filename: `js/[name]${mode === 'production' ? '.min' : ''}.js`,
+      filename: `[name]${mode === 'production' ? '.min' : ''}.js`,
     },
     // devtool: 'sourcemap',
     module: {
       rules: [
         {
           test: /\.s?css$/,
-          use: [ MiniCssExtractPlugin.loader, 'css-loader', 'sass-loader' ],
+          use: [
+            MiniCssExtractPlugin.loader,
+            'css-loader',
+            'sass-loader',
+          ],
         },
         {
           test: /\.html$/,
@@ -28,7 +32,14 @@ module.exports = function (_, { mode = 'development' }) {
         },
         {
           test: /\.(woff2?|eot|ttf)(\?.*)?$/i,
-          use: getUrlLoader('./fonts/[name].[ext]'),
+          use: [
+            {
+              loader: 'url-loader',
+              options: {
+                limit: 1000,
+              },
+            },
+          ],
         },
       ],
     },
@@ -52,13 +63,3 @@ module.exports = function (_, { mode = 'development' }) {
     },
   };
 };
-
-function getUrlLoader (name = '[name].[ext]') {
-  return {
-    loader: 'url-loader',
-    options: {
-      limit: 1000,
-      name: name,
-    },
-  };
-}
