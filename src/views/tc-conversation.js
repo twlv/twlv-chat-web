@@ -24,6 +24,10 @@ class TcConversation extends View {
         type: Array,
         value: () => ([]),
       },
+      classLine: {
+        type: String,
+        value: 'line',
+      },
     });
   }
 
@@ -56,7 +60,6 @@ class TcConversation extends View {
     await this.__app.sendText(this.channelId, message);
 
     this.set('form.message', '');
-
     // TODO: workaround xin bug, value text not updated
     this.$.messageField.value = '';
   }
@@ -64,6 +67,18 @@ class TcConversation extends View {
   render (channel) {
     this.set('messages', []);
     this.set('messages', channel.entries);
+    let messagePane = this.$.messagesPane;
+
+    setTimeout(() => {
+      messagePane.scrollTo(0, messagePane.scrollHeight);
+    }, 500);
+  }
+
+  isMyChat (address) {
+    if (address !== this.__app.client.node.identity.address) {
+      return false;
+    }
+    return true;
   }
 }
 

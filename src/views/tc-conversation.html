@@ -8,7 +8,7 @@
   <div id="messagesPane" class="messages flex">
     <xin-for items="[[messages]]" as="message">
       <template>
-        <div class="line">
+        <div class="line" class.my="[[isMyChat(message.address)]]">
           <span class="name">[[message.address]]</span>
           <p class="chat">[[message.content]] <span>[[message.t]]</span></p>
         </div>
