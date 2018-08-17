@@ -1,6 +1,7 @@
 import { define } from '@xinix/xin';
 import { View } from '@xinix/xin/components/view';
 
+import TcNotification from '../components/tc-notification';
 import './tc-conversation.scss';
 
 class TcConversation extends View {
@@ -68,7 +69,6 @@ class TcConversation extends View {
     this.set('messages', []);
     this.set('messages', channel.entries);
     let messagePane = this.$.messagesPane;
-
     setTimeout(() => {
       messagePane.scrollTo(0, messagePane.scrollHeight);
     }, 500);

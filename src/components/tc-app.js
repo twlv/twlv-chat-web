@@ -3,6 +3,7 @@ import { App } from '@xinix/xin/components';
 import { Node, Identity } from '@twlv/core';
 import { ApiClient } from '../lib/api';
 
+import { TcNotification } from '../components/tc-notification';
 import '@xinix/xin/middlewares';
 import './tc-app.scss';
 
@@ -58,6 +59,13 @@ class TcApp extends App {
 
     this.client = new ApiClient({ node, controlUrls, profile });
 
+    this.client.on('channel:update', channel => {
+      let currentId = this.getFragment().split('/').pop();
+      if (channel.id !== currentId) {
+        let { content: message, address } = channel.entries.pop();
+        TcNotification.create({ message, address, channelId: channel.id });
+      }
+    });
     // prepare chat client
     await this.client.start();
 
@@ -74,6 +82,7 @@ class TcApp extends App {
       ? channel.members[1]
       : channel.members[0];
   }
+
 }
 
 define('tc-app', TcApp);
