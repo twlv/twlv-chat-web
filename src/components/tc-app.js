@@ -1,7 +1,10 @@
 import { define } from '@xinix/xin';
 import { App } from '@xinix/xin/components';
 import { Node, Identity } from '@twlv/core';
-import { ApiClient } from '../lib/api';
+import { SockJsDialer } from '@twlv/transport-sockjs/dialer';
+import { WebRTCDialer, WebRTCListener } from '@twlv/transport-webrtc';
+import { Chat } from '../lib/chat';
+import { WebRTCFinder } from '../lib/finders';
 
 import { TcNotification } from '../components/tc-notification';
 import '@xinix/xin/middlewares';
@@ -14,10 +17,6 @@ class TcApp extends App {
 
   get props () {
     return Object.assign({}, super.props, {
-      client: {
-        type: Object,
-      },
-
       storage: {
         type: Object,
         value: window.localStorage,
@@ -28,18 +27,21 @@ class TcApp extends App {
   ready () {
     super.ready();
 
+    this._onChannelUpdate = this._onChannelUpdate.bind(this);
+
     this.networkId = this.__repository.get('tc.networkId') || 'twlv-chat';
+    this.apiUrls = this.__repository.get('tc.apiUrls');
 
     this.use(this._middleware.bind(this));
   }
 
   async _middleware (ctx, next) {
-    if (this.storage.TC_KEY) {
+    if (!this.node && this.storage.TC_KEY) {
       let identity = new Identity(this.storage.TC_KEY);
       await this.signIn(identity);
     }
 
-    if (ctx.uri !== '/auth' && !this.client) {
+    if (ctx.uri !== '/auth' && !this.node) {
       return this.navigate('/auth');
     }
 
@@ -49,40 +51,53 @@ class TcApp extends App {
   async signIn (identity) {
     let { networkId } = this;
 
-    let node = new Node({ networkId, identity });
+    this.node = new Node({ networkId, identity });
 
-    let profile = {
+    this.node.addDialer(new SockJsDialer());
+    this.node.addFinder(new WebRTCFinder());
+
+    let listener = new WebRTCListener();
+    let dialer = new WebRTCDialer();
+    this.node.addListener(listener);
+    this.node.addDialer(dialer);
+
+    await this.node.start();
+
+    this.apiAddresses = [];
+    await Promise.all(this.apiUrls.map(async url => {
+      let con = await this.node.connect(url);
+      this.apiAddresses.push(con.peer.address);
+    }));
+
+    listener.signalers = dialer.signalers = this.apiAddresses;
+
+    this.profile = {
       name: this.storage.TC_NAME || identity.address,
     };
 
-    let controlUrls = this.__repository.get('tc.apiUrls');
+    this.chat = new Chat({ node: this.node });
 
-    this.client = new ApiClient({ node, controlUrls, profile });
+    this.chat.on('channel:update', this._onChannelUpdate);
 
-    this.client.on('channel:update', channel => {
-      let currentId = this.getFragment().split('/').pop();
-      if (channel.id !== currentId) {
-        let { content: message, address } = channel.entries.pop();
-        TcNotification.create({ message, address, channelId: channel.id });
-      }
-    });
     // prepare chat client
-    await this.client.start();
+    await this.chat.start();
 
     this.storage.TC_KEY = identity.privKey;
   }
 
-  sendText (channelId, message) {
-    this.client.send({ channelId, content: message });
-  }
+  _onChannelUpdate (channel) {
+    let inConversation = this.getFragment().match(/^\/conversation\/([a-zA-Z0-9]+)/);
 
-  async getChannelName (id) {
-    let channel = await this.client.prepareChannel(id);
-    return channel.members[0] === this.client.identity.address
-      ? channel.members[1]
-      : channel.members[0];
-  }
+    if (inConversation && channel.id === inConversation[1]) {
+      return;
+    }
 
+    TcNotification.create({
+      title: 'You got message',
+      body: 'You got message',
+      url: `#!/conversation/${channel.id}`,
+    });
+  }
 }
 
 define('tc-app', TcApp);

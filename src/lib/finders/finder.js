@@ -1,10 +1,6 @@
 // const debug = require('debug')('twlv-chat-web:lib:api-finder');
 
-export class ApiFinder {
-  constructor (client) {
-    this.client = client;
-  }
-
+export class WebRTCFinder {
   up (node) {
     this.node = node;
   }

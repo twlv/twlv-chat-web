@@ -1,7 +1,6 @@
 import { define } from '@xinix/xin';
 import { View } from '@xinix/xin/components/view';
 
-import TcNotification from '../components/tc-notification';
 import './tc-conversation.scss';
 
 class TcConversation extends View {
@@ -35,7 +34,7 @@ class TcConversation extends View {
   attached () {
     super.attached();
 
-    this.__app.client.on('channel:update', channel => {
+    this.__app.chat.on('channel:update', channel => {
       if (channel.id !== this.parameters.id) {
         return;
       }
@@ -44,21 +43,28 @@ class TcConversation extends View {
     });
   }
 
-  async focusing () {
+  focusing () {
     super.focusing();
 
-    this.channelId = this.parameters.id;
-    this.$.messageField.focus();
+    this.async(async () => {
+      this.channelId = this.parameters.id;
 
-    this.set('name', await this.__app.getChannelName(this.channelId));
+      this.$.messageField.focus();
+
+      let channel = await this.__app.chat.prepareChannel(this.channelId);
+      // this.set('name', await this.__app.getChannelName(this.channelId));
+      this.render(channel);
+    });
   }
 
   async sendMessage (evt) {
     evt.preventDefault();
 
     let message = this.form.message;
-
-    await this.__app.sendText(this.channelId, message);
+    await this.__app.chat.send({
+      channelId: this.channelId,
+      content: message,
+    });
 
     this.set('form.message', '');
     // TODO: workaround xin bug, value text not updated
@@ -75,7 +81,7 @@ class TcConversation extends View {
   }
 
   isMyChat (address) {
-    if (address !== this.__app.client.node.identity.address) {
+    if (address !== this.__app.node.identity.address) {
       return false;
     }
     return true;

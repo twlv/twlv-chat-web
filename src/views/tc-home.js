@@ -8,11 +8,27 @@ class TcHome extends View {
 
   get props () {
     return Object.assign({}, super.props, {
+      address: {
+        type: String,
+        value: '',
+      },
+
       form: {
         type: Object,
         value: () => ({}),
       },
+
+      callForm: {
+        type: Object,
+        value: () => ({}),
+      },
     });
+  }
+
+  focusing () {
+    super.focusing();
+
+    this.set('address', this.__app.node.identity.address);
   }
 
   startConversation (evt) {
@@ -22,8 +38,19 @@ class TcHome extends View {
       throw new Error('Address is required');
     }
 
-    let channel = this.__app.client.getPrivateChannel(this.form.address);
+    let channel = this.__app.chat.getPrivateChannel(this.form.address);
     this.__app.navigate(`/conversation/${channel.id}`);
+  }
+
+  startCall (evt) {
+    evt.preventDefault();
+
+    if (!this.callForm || !this.callForm.address) {
+      throw new Error('Address is required');
+    }
+
+    let session = this.__app.call.createSession();
+    this.__app.navigate(`/connect/${session.id}/${this.callForm.address}`);
   }
 }
 

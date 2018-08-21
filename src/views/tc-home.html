@@ -3,7 +3,7 @@
 
   <div>
     <label>My Address</label>
-    <div>[[__app.client.identity.address]]</div>
+    <div>[[address]]</div>
   </div>
 
   <hr>
@@ -11,5 +11,12 @@
   <form (submit)="startConversation(evt)">
     <input type="text" value="{{form.address}}">
     <input type="submit" value="Start conversation">
+  </form>
+
+  <hr>
+
+  <form (submit)="startCall(evt)">
+    <input type="text" value="{{callForm.address}}">
+    <input type="submit" value="Start call">
   </form>
 </div>

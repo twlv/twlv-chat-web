@@ -1,5 +1,3 @@
-const assert = require('assert');
-
 class State {
   static compare (state1, state2) {
     if (state1.t < state2.t) {
@@ -42,7 +40,9 @@ class State {
   }
 
   update (state) {
-    assert.equal(state.address, this.address, 'Mismatch state address');
+    if (state.address !== this.address) {
+      throw new Error('Mismatch state address');
+    }
 
     if (this.compare(state) < 0) {
       this.t = state.t;

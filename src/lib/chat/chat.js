@@ -1,7 +1,6 @@
 const { EventEmitter } = require('events');
 const { Channel } = require('./channel');
 const debug = require('debug')('twlv-chat:chat');
-const assert = require('assert');
 
 class Chat extends EventEmitter {
   constructor ({ node } = {}) {
@@ -14,20 +13,15 @@ class Chat extends EventEmitter {
   }
 
   get identity () {
-    assert(this.node, 'Undefined node');
     return this.node.identity;
   }
 
   start () {
-    assert(this.node, 'Undefined node');
     this.node.on('message', this._onMessage);
-    return this.node.start();
   }
 
   stop () {
-    assert(this.node, 'Undefined node');
     this.node.removeListener('message', this._onMessage);
-    return this.node.stop();
   }
 
   async send ({ channelId, address, content, type = 'text/plain' }) {
@@ -67,8 +61,11 @@ class Chat extends EventEmitter {
     if (!channel) {
       if (id[0] === '0') {
         let members = [ id.substr(1, 20), id.substr(21) ];
-        let peer = members[0] === this.identity.address ? members[1] : members[0];
-        channel = this.getPrivateChannel(peer);
+        if (!members.find(member => member === this.identity.address)) {
+          throw new Error('Invalid private channel id');
+        }
+        let address = members[0] === this.identity.address ? members[1] : members[0];
+        channel = this.getPrivateChannel(address);
       } else {
         throw new Error('Unimplemented');
       }
