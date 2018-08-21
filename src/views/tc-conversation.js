@@ -31,16 +31,22 @@ class TcConversation extends View {
     });
   }
 
-  attached () {
-    super.attached();
+  created () {
+    super.created();
 
-    this.__app.chat.on('channel:update', channel => {
-      if (channel.id !== this.parameters.id) {
-        return;
-      }
+    this._onChannelUpdate = this._onChannelUpdate.bind(this);
+  }
 
-      this.render(channel);
-    });
+  focused () {
+    super.focused();
+
+    this.__app.chat.on('channel:update', this._onChannelUpdate);
+  }
+
+  blurred () {
+    super.blurred();
+
+    this.__app.chat.removeListener('channel:update', this._onChannelUpdate);
   }
 
   focusing () {
@@ -85,6 +91,14 @@ class TcConversation extends View {
       return false;
     }
     return true;
+  }
+
+  _onChannelUpdate (channel) {
+    if (channel.id !== this.parameters.id) {
+      return;
+    }
+
+    this.render(channel);
   }
 }
 

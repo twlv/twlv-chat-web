@@ -76,7 +76,6 @@ class TcApp extends App {
     };
 
     this.chat = new Chat({ node: this.node });
-
     this.chat.on('channel:update', this._onChannelUpdate);
 
     // prepare chat client
