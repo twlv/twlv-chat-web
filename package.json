@@ -4,6 +4,7 @@
   "description": "TWLV Chat Web Client",
   "main": "index.js",
   "scripts": {
+    "start": "node index.js",
     "lint": "eslint .",
     "dev": "webpack-dev-server --host 0.0.0.0",
     "build": "webpack --mode=production",
@@ -47,5 +48,9 @@
     "webpack": "^4.17.1",
     "webpack-cli": "^3.1.0",
     "webpack-dev-server": "^3.1.5"
+  },
+  "dependencies": {
+    "bono": "^0.3.6",
+    "koa-static": "^5.0.0"
   }
 }
