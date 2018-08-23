@@ -4,6 +4,7 @@ import { Node, Identity } from '@twlv/core';
 import { SockJsDialer } from '@twlv/transport-sockjs/dialer';
 import { WebRTCDialer, WebRTCListener } from '@twlv/transport-webrtc';
 import { Chat } from '../lib/chat';
+import { Call } from '../lib/call';
 import { WebRTCFinder } from '../lib/finders';
 
 import { TcNotification } from '../components/tc-notification';
@@ -28,6 +29,9 @@ class TcApp extends App {
     super.ready();
 
     this._onChannelUpdate = this._onChannelUpdate.bind(this);
+    this._onSessionInvite = this._onSessionInvite.bind(this);
+    this._onSessionHangup = this._onSessionHangup.bind(this);
+    this._onSessionEstablish = this._onSessionEstablish.bind(this);
 
     this.networkId = this.__repository.get('tc.networkId') || 'twlv-chat';
     this.apiUrls = this.__repository.get('tc.apiUrls');
@@ -49,9 +53,7 @@ class TcApp extends App {
   }
 
   async signIn (identity) {
-    let { networkId } = this;
-
-    this.node = new Node({ networkId, identity });
+    this.node = new Node({ networkId: this.networkId, identity });
 
     this.node.addDialer(new SockJsDialer());
     this.node.addFinder(new WebRTCFinder());
@@ -75,13 +77,31 @@ class TcApp extends App {
       name: this.storage.TC_NAME || identity.address,
     };
 
+    // prepare chat client
     this.chat = new Chat({ node: this.node });
     this.chat.on('channel:update', this._onChannelUpdate);
-
-    // prepare chat client
     await this.chat.start();
 
+    // prepare call client
+    this.call = new Call({ node: this.node });
+    this.call.on('session:invite', this._onSessionInvite);
+    this.call.on('session:hangup', this._onSessionHangup);
+    this.call.on('session:establish', this._onSessionEstablish);
+    await this.call.start();
+
     this.storage.TC_KEY = identity.privKey;
+  }
+
+  async signOut () {
+    delete this.storage.TC_KEY;
+
+    await this.chat.stop();
+    await this.call.stop();
+    await this.node.stop();
+
+    this.chat = null;
+    this.call = null;
+    this.node = null;
   }
 
   _onChannelUpdate (channel) {
@@ -96,6 +116,18 @@ class TcApp extends App {
       body: 'You got message',
       url: `#!/conversation/${channel.id}`,
     });
+  }
+
+  _onSessionInvite (session) {
+    this.navigate(`/connect/${session.id}`);
+  }
+
+  _onSessionHangup (session) {
+    this.navigate('/');
+  }
+
+  _onSessionEstablish (session) {
+    this.navigate(`/session/${session.id}`);
   }
 }
 

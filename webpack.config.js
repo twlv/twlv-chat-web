@@ -3,6 +3,7 @@ const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const OptimizeCSSAssetsPlugin = require('optimize-css-assets-webpack-plugin');
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 module.exports = function (_, { mode = 'development' }) {
   return {
@@ -50,6 +51,9 @@ module.exports = function (_, { mode = 'development' }) {
       new HtmlWebpackPlugin({
         template: './index.html',
       }),
+      new CopyWebpackPlugin([
+        { from: 'videos/*' },
+      ]),
     ],
     optimization: {
       minimizer: [

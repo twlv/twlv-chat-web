@@ -1,7 +1,10 @@
 <div class="pane">
   <div>[[status]]</div>
-  <div>
-    <a href="#" hidden$="[[initiator]]">Accept</a>
-    <a href="#">Hangup</a>
+  <div hidden$="[[initiator]]">
+    <a href="#" (click)="answerClicked(evt)">Accept</a>
+    <a href="#" (click)="hangupClicked(evt)">Reject</a>
+  </div>
+  <div hidden$="[[initiator|not]]">
+    <a href="#" (click)="hangupClicked(evt)">Hangup</a>
   </div>
 </div>

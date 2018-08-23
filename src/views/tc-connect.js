@@ -10,8 +10,8 @@ class TcConnect extends View {
       },
 
       status: {
-        type: Number,
-        value: 0,
+        type: String,
+        value: '',
       },
     });
   }
@@ -20,23 +20,53 @@ class TcConnect extends View {
     return require('./tc-connect.html');
   }
 
-  focused () {
+  created () {
+    super.created();
+
+    this._onSessionStatus = this._onSessionStatus.bind(this);
+  }
+
+  async focused () {
     super.focused();
 
     this.set('initiator', Boolean(this.parameters.address));
 
-    let session = this.__app.call.getSession(this.parameters.id);
+    this.session = this.__app.call.getSession(this.parameters.id);
 
-    if (!session) {
-      session = this.__app.call.createSession(this.parameters.id);
+    if (!this.session) {
+      this.session = this.__app.call.createSession(this.parameters.id);
     }
 
-    this.async(async () => {
-      session.on('status', status => {
-        this.set('status', status);
-      });
-      await session.dial(this.parameters.address);
-    });
+    this.set('status', this.session.status);
+    this.session.on('status', this._onSessionStatus);
+
+    if (this.initiator) {
+      await this.session.invite(this.parameters.address);
+    }
+  }
+
+  blurred () {
+    super.blurred();
+    this.session.removeListener('status', this._onSessionStatus);
+    this.session = undefined;
+  }
+
+  async hangupClicked (evt) {
+    evt.preventDefault();
+
+    await this.session.hangup();
+
+    this.__app.navigate('/');
+  }
+
+  async answerClicked (evt) {
+    evt.preventDefault();
+
+    await this.session.answer();
+  }
+
+  _onSessionStatus (status) {
+    this.set('status', status);
   }
 }
 
