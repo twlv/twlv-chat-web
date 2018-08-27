@@ -3,14 +3,21 @@ tc-conversation {
     position: relative;
     padding: 10px 5px 10px 60px;
     border-bottom: 1px solid #d5d7d4;
-
-    img {
+    background: #81a9ab;
+    img.address {
       object-fit: cover;
       width: 40px;
       height: 40px;
       border-radius: 50%;
       position: absolute;
       left: 10px;
+    }
+    img.phone {
+      width: 35px;
+      position: absolute;
+      align-items: flex-end;
+      right: 12px;
+      top: 12px;
     }
     h3 {
       margin: 0;
@@ -21,7 +28,7 @@ tc-conversation {
     span {
       font-size: .8rem;
       letter-spacing: .02rem;
-      color: #c1c1c1;
+      color: #ffffff;
       font-weight: 300;
     }
 
@@ -29,6 +36,7 @@ tc-conversation {
   .messages {
     overflow-y: scroll;
     padding-bottom: 10px;
+
     .line {
       padding: 10px 10px 0;
       clear: both;
@@ -45,7 +53,6 @@ tc-conversation {
         border-radius: 1rem;
         margin-bottom: 0.5rem;
         word-break: break-all;
-        text-transform: capitalize;
         background-color: #E91E63;
         color: #fff;
         border-bottom-left-radius: 0.125rem;
@@ -79,20 +86,17 @@ tc-conversation {
   }
   .message {
     height: auto;
-    background: #e6e6e6;
+    background: #81a9ab;
     padding: 10px;
     box-sizing: border-box;
 
     input {
       width: auto;
-      border-radius: 15px;
-      /* line-height: 230%; */
+      border-radius: 3px;
+      // line-height: 230%;
       box-shadow: inherit;
       border: 0;
-      padding: 10px;
-    }
-    .my.line {
-
+      margin-left: 3px;
     }
   }
 }

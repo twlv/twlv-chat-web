@@ -1,16 +1,15 @@
 <div class="pane">
-  <h3>Authenticate</h3>
-
-  <form (submit)="signIn(evt)">
-    <div>
-      <label>Identity key</label>
-      <textarea class="privkey-field">[[identity.privKey]]</textarea>
-    </div>
-
-    <input type="submit" value="Get online">
-  </form>
-
-  <p>or</p>
-
-  <button (click)="generate(evt)">Generate new identity</button>
+  <div class="viewport">
+    <form (submit)="signIn(evt)">
+      <div class="box">
+        <h3>Authenticate</h3>
+        <div class="form-group">
+          <textarea class="form-control privkey-field" id="identityKey" rows="3" (change)="computeOnline(evt)">{{identity.privKey}}</textarea>
+        </div>
+        <button class="btn btn-outline-success btn-block" (click)="generate(evt)">Generate new identity</button>
+        <hr>
+        <input type="submit" class="btn btn-info" disabled$="[[computeAuth]]" value="Get online">
+      </div>
+    </form>
+  </div>
 </div>

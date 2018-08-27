@@ -6,13 +6,15 @@ import './fonts/lato/stylesheet.css';
 import '@xinix/xin/scss/xin.scss';
 import '@xinix/xin/scss/xin-components.scss';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+
 import { TcNotification } from './components/tc-notification';
 
 // connect to local
-// const SOCK_URL = `sockjs://${location.hostname}:3000/sock`;
+const SOCK_URL = `sockjs://${location.hostname}:3000/sock`;
 
 // connect to heroku
-const SOCK_URL = localStorage.TC_SOCK_URL || 'sockjs://twlv-chat-api.herokuapp.com/sock';
+// const SOCK_URL = localStorage.TC_SOCK_URL || 'sockjs://twlv-chat-api.herokuapp.com/sock';
 
 (async () => {
   await bootstrap({

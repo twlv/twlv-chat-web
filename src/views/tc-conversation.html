@@ -1,8 +1,13 @@
 <div class="vertical layout">
   <div class="friend-chat">
-    <img src="https://www.theladders.com/wp-content/uploads/Mentally_Stron_040418-800x450.jpg" alt="">
-    <h3>[[name]]</h3>
-    <span>online</span>
+    <div>
+      <img class="address" src="https://www.theladders.com/wp-content/uploads/Mentally_Stron_040418-800x450.jpg" alt="">
+      <h3>[[name]]</h3>
+      <span>online</span>
+    </div>
+    <div>
+      <img class="phone" (click)="startCall(evt)" src="https://cdn.shopify.com/s/files/1/1854/1819/files/phone-blue-icon.png?16594292423607258669" alt="">
+    </div>
   </div>
 
   <div id="messagesPane" class="messages flex">
@@ -17,7 +22,7 @@
   </div>
 
   <form class="message layout">
-    <input id="messageField" class="flex" type="text" placeholder="Write your message..." value="{{form.message}}">
-    <input type="submit" (click)="sendMessage(evt)" value="Send">
+    <input id="messageField" class="flex form-control" type="text" placeholder="Write your message..." value="{{form.message}}">
+    <input type="submit" (click)="sendMessage(evt)" class="btn btn-info" value="Send">
   </form>
 </div>

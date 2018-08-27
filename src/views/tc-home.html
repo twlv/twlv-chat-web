@@ -1,22 +1,13 @@
-<div class="pane">
-  <h3>Home</h3>
-
-  <div>
-    <label>My Address</label>
-    <div>[[address]]</div>
-  </div>
-
-  <hr>
-
+<nav class="navbar navbar-light" style="background-color: #e3f2fd;">
+    <a class="navbar-brand" href="#">
+      <img src="https://i.pinimg.com/originals/56/f0/c7/56f0c7de57fdae6d0a9ddc43448b6dff.png" width="40" height="40" class="d-inline-block align-top" alt="">
+      Twlv Chat
+    </a>
+</nav>
+<div class="pane p-2">
+  <p> Your Address: <span>[[address]]</span></p>
   <form (submit)="startConversation(evt)">
-    <input type="text" value="{{form.address}}">
-    <input type="submit" value="Start conversation">
-  </form>
-
-  <hr>
-
-  <form (submit)="startCall(evt)">
-    <input type="text" value="{{callForm.address}}">
-    <input type="submit" value="Start call">
+    <input type="text" class="form-control mb-2" value="{{form.address}}">
+    <input type="submit" class="btn btn-outline-primary btn-block" value="Start Conversation">
   </form>
 </div>

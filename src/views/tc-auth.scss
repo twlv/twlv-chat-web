@@ -5,4 +5,34 @@ tc-auth {
     overflow-wrap: normal;
     overflow-x: scroll;
   }
+  .box {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 22px 70px 4px rgba(0, 0, 0, 0.56);
+    width: 90%;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border-radius: 4px;
+    h3 {
+      text-align: center;
+    }
+  }
+  .form-group {
+    label {
+      text-align: center;
+    }
+  }
+
+  .viewport {
+    background-image: url(https://png.pngtree.com/thumb_back/fw800/back_pic/04/03/16/5758071097150c8.jpg);
+    background-size: cover;
+    background-position: center center;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    form {
+      width: 100%;
+    }
+  }
 }

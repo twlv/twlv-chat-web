@@ -15,6 +15,10 @@ class TcAuth extends View {
         type: Object,
         value: () => (null),
       },
+      computeAuth: {
+        type: String,
+        value: true,
+      },
     });
   }
 
@@ -30,10 +34,21 @@ class TcAuth extends View {
     this.__app.navigate('/');
   }
 
+  computeOnline () {
+    if (this.identity.privKey) {
+      this.set('computeAuth', false);
+      return;
+    }
+    this.set('computeAuth', true);
+  }
+
   generate (evt) {
     evt.preventDefault();
 
-    this.set('identity', Identity.generate());
+    this.set({
+      identity: Identity.generate(),
+      computeAuth: false,
+    });
   }
 }
 

@@ -41,17 +41,6 @@ class TcHome extends View {
     let channel = this.__app.chat.getPrivateChannel(this.form.address);
     this.__app.navigate(`/conversation/${channel.id}`);
   }
-
-  startCall (evt) {
-    evt.preventDefault();
-
-    if (!this.callForm || !this.callForm.address) {
-      throw new Error('Address is required');
-    }
-
-    let session = this.__app.call.createSession();
-    this.__app.navigate(`/connect/${session.id}/${this.callForm.address}`);
-  }
 }
 
 define('tc-home', TcHome);

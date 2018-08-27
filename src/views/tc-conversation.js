@@ -28,6 +28,10 @@ class TcConversation extends View {
         type: String,
         value: 'line',
       },
+      channelAddress: {
+        type: String,
+        value: '',
+      },
     });
   }
 
@@ -58,7 +62,9 @@ class TcConversation extends View {
       this.$.messageField.focus();
 
       let channel = await this.__app.chat.prepareChannel(this.channelId);
-      // this.set('name', await this.__app.getChannelName(this.channelId));
+      let channelAddress = channel.members.splice(channel.members.indexOf(channel.members[this.__app.node.identity.address]), 1);
+
+      this.set('channelAddress', channelAddress.pop());
       this.render(channel);
     });
   }
@@ -99,6 +105,16 @@ class TcConversation extends View {
     }
 
     this.render(channel);
+  }
+
+  startCall (evt) {
+    evt.preventDefault();
+    if (!this.channelAddress) {
+      throw new Error('Address is required');
+    }
+
+    let session = this.__app.call.createSession();
+    this.__app.navigate(`/connect/${session.id}/${this.channelAddress}`);
   }
 }
 
