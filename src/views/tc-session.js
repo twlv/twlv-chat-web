@@ -34,11 +34,11 @@ class TcSession extends View {
         // DEBUG: for debug purpose only
         // this.session = this.__app.call.createSession(this.parameters.id);
         // try {
-        //   await this.__app.call.connect(localStorage.debugPeer);
+        //   await this.__app.call.connect(localStorage.TC_DEBUG_PEER);
         // } catch (err) {
-        //   await this.__app.call.connect(localStorage.debugPeer);
+        //   await this.__app.call.connect(localStorage.TC_DEBUG_PEER);
         // }
-        // await this.session._invite(localStorage.debugPeer);
+        // await this.session._invite(localStorage.TC_DEBUG_PEER);
         // await this.session._answer();
         // DEBUG: for debug purpose only
 
@@ -52,12 +52,12 @@ class TcSession extends View {
       this.session.on('stream', this._onSessionStream);
 
       let stream;
-      if (localStorage.debugVideo) {
-        this.$.localVideo.src = localStorage.debugVideo;
+      if (localStorage.TC_DEBUG_VIDEO) {
+        this.$.localVideo.src = localStorage.TC_DEBUG_VIDEO;
         stream = this.$.localVideo.captureStream();
       } else {
         stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-        this.$.localVideo.srcObject = stream;
+        // this.$.localVideo.srcObject = stream;
       }
 
       await this.async(async () => {

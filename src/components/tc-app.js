@@ -3,7 +3,7 @@ import { App } from '@xinix/xin/components';
 import { Node, Identity } from '@twlv/core';
 import { SockJsDialer } from '@twlv/transport-sockjs/dialer';
 import { WebRTCDialer, WebRTCListener } from '@twlv/transport-webrtc';
-import { Chat } from '../lib/chat';
+import { Chat } from 'twlv-chat';
 import { Call } from '../lib/call';
 import { WebRTCFinder } from '../lib/finders';
 

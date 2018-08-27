@@ -51,6 +51,7 @@
   },
   "dependencies": {
     "bono": "^0.3.6",
-    "koa-static": "^5.0.0"
+    "koa-static": "^5.0.0",
+    "twlv-chat": "^1.0.0"
   }
 }

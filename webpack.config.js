@@ -65,5 +65,10 @@ module.exports = function (_, { mode = 'development' }) {
         new OptimizeCSSAssetsPlugin({}),
       ],
     },
+    devServer: {
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+      },
+    },
   };
 };

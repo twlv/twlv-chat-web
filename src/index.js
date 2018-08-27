@@ -12,7 +12,7 @@ import { TcNotification } from './components/tc-notification';
 // const SOCK_URL = `sockjs://${location.hostname}:3000/sock`;
 
 // connect to heroku
-const SOCK_URL = 'sockjs://twlv-chat-api.herokuapp.com/sock';
+const SOCK_URL = localStorage.TC_SOCK_URL || 'sockjs://twlv-chat-api.herokuapp.com/sock';
 
 (async () => {
   await bootstrap({
