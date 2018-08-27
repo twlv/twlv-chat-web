@@ -4,7 +4,7 @@ import { Node, Identity } from '@twlv/core';
 import { SockJsDialer } from '@twlv/transport-sockjs/dialer';
 import { WebRTCDialer, WebRTCListener } from '@twlv/transport-webrtc';
 import { Chat } from 'twlv-chat';
-import { Call } from '../lib/call';
+import { Call } from 'twlv-call';
 import { WebRTCFinder } from '../lib/finders';
 
 import { TcNotification } from '../components/tc-notification';

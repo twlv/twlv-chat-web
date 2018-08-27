@@ -57,7 +57,7 @@ class TcSession extends View {
         stream = this.$.localVideo.captureStream();
       } else {
         stream = await navigator.mediaDevices.getUserMedia({ audio: true, video: true });
-        // this.$.localVideo.srcObject = stream;
+        this.$.localVideo.srcObject = stream;
       }
 
       await this.async(async () => {
